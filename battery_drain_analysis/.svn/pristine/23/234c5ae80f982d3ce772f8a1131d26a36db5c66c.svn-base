@@ -1,0 +1,38 @@
+# depslib dependency file v1.0
+1402919624 source:g:\lavoro\local-repo\elisaiii-working\pc-side-elisa3-library-4-robots\terminal.c
+	"terminal.h"
+	"input.h"
+	<stdio.h>
+	"windows.h"
+	<ncurses.h>
+
+1402919624 g:\lavoro\local-repo\elisaiii-working\pc-side-elisa3-library-4-robots\terminal.h
+
+1402919622 g:\lavoro\local-repo\elisaiii-working\pc-side-elisa3-library-4-robots\input.h
+	"elisa3-lib.h"
+
+1403070042 g:\lavoro\local-repo\elisaiii-working\pc-side-elisa3-library\elisa3-lib.h
+	<stdio.h>
+	<sys/types.h>
+	<math.h>
+	<unistd.h>
+	"usb-comm.h"
+
+1402573096 g:\lavoro\local-repo\elisaiii-working\pc-side-elisa3-library\usb-comm.h
+	<stdio.h>
+
+1402919624 source:g:\lavoro\local-repo\elisaiii-working\pc-side-elisa3-library-4-robots\input.c
+	"input.h"
+	"terminal.h"
+	"windows.h"
+	<ncurses.h>
+
+1403016332 source:g:\lavoro\local-repo\elisaiii-working\pc-side-elisa3-library-4-robots\main.c
+	<stdio.h>
+	<sys/types.h>
+	<string.h>
+	<math.h>
+	"elisa3-lib.h"
+	"terminal.h"
+	"input.h"
+

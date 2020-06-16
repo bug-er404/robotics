@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include <sys/types.h>
+#include <time.h>
+#include "elisa3-lib.h"
+
+#ifdef _WIN32
+    #include "windows.h"
+#endif
+
+#define OBSTACLE_THR 50 //170
+
+// received from robot
+int robotAddress[4];
+unsigned int robProx[4][8];
+
+// sent to robot
+char robLSpeed[4], robRSpeed[4];
+unsigned char robRedLed[4], robGreenLed[4], robBlueLed[4];
+
+// various
+int rightProxSum[4], leftProxSum[4];	// sum of proximity values on right or left
+unsigned int i;
+
+int main(void) {
+
+    srand ( time(NULL) );
+
+    for(i=0; i<4; i++) {
+        printf("\r\nInsert the robot address %d: ", i);
+        scanf("%d", &robotAddress[i]);
+    }
+
+    // init the communication with the RF module and thus with the robot
+    openRobotComm();
+
+    // set the address of the robot to control
+    for(i=0; i<4; i++) {
+        setRobotAddress(i, robotAddress[i]);
+    }
+
+    for(i=0; i<4; i++) {
+        resetFlagTX(robotAddress[i]);  // no onboard obstacle avoidance
+    }
+
+    i=0;
+
+    while(1) {
+
+        getAllProximity4(robProx);
+
+        i = (i+1)%100;  // use to change the rgb leds
+
+        for(i=0; i<4; i++) {
+
+            if(i==0) {
+                robRedLed[i] = rand()%100;
+                robGreenLed[i] = rand()%100;
+                robBlueLed[i] = rand()%100;
+            }
+
+            // obstacle avoidance using the 3 front proximity sensors
+            rightProxSum[i] = robProx[i][0]/2 + robProx[i][1];
+            leftProxSum[i] = robProx[i][0]/2 + robProx[i][7];
+
+            rightProxSum[i] /= 10;                 // scale the sum to have a moderate impact on the velocity
+            leftProxSum[i] /= 10;
+            if(rightProxSum[i] > 60) {             // velocity of the motors goes from -30 to +30
+                rightProxSum[i] = 60;
+            }
+            if(leftProxSum[i] > 60) {
+                leftProxSum[i] = 60;
+            }
+            robRSpeed[i] = 30-leftProxSum[i];     // set the speed to the motors
+            robLSpeed[i] = 30-rightProxSum[i];
+        }
+
+        setLeftSpeed4(robLSpeed);
+        setRightSpeed4(robRSpeed);
+        setRed4(robRedLed);
+        setGreen4(robGreenLed);
+        setBlue4(robBlueLed);
+
+    }
+
+    closeRobotComm();
+
+	return 0;
+
+}
+
